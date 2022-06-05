@@ -1,11 +1,14 @@
-{% extends "layout_index.swig" %}
-
+{% extends "layout.swig" %}
 {% block body %}
-<div class="jumbotron">
-	<h1>{{siteName}}~</h1>
-	<p class="lead">Max upload size is {{max_upload_size}}&nbsp;MiB & files expire after 24H, read the <a href="faq.html"><abbr title="Frequently asked questions">FAQ</abbr></a></p>
-	{% include "upload_form.swig" %}
+<div class="cover-container d-flex w-100 h-100 p-3 text-white mx-auto flex-column">
+	{% include "nav.swig" %}
+	<main class="px-3">
+		<img src="img/onnli-share.png" />
+		<h1>Temporary File Sharing</h1>
+		<p class="lead">Max upload size is {{max_upload_size}}&nbsp;MiB & files expire after 24H</p>
+		{% include "banners.swig" %}
+		{% include "upload_form.swig" %}
+	</main>
+	{% include "footer.swig" %}
 </div>
-{% include "banners.swig" %}
-{% include "nav.swig" %}
 {% endblock %}

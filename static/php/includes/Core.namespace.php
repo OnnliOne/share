@@ -91,28 +91,6 @@ namespace Core {
         }
     }
 
-    class cuteGrills
-    {
-        public static array $GRILLS;
-
-        public static function showGrills()
-        {
-            self::loadGrills();
-            if (!headers_sent()) {
-                header(
-                    'Location: /img/grills/' .
-                    self::$GRILLS[array_rand(self::$GRILLS)],
-                    true,
-                    303
-                );
-            }
-        }
-
-        public static function loadGrills()
-        {
-            self::$GRILLS = array_slice(scandir('img/grills/'), 2);
-        }
-    }
 
     class Response
     {

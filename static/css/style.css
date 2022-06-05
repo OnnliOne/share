@@ -1,0 +1,359 @@
+/**
+ * USE BORDER BOX
+ */
+*,
+*:before,
+*:after {
+  box-sizing: border-box;
+}
+
+/*
+ * Globals
+ */
+
+
+/* Custom default button */
+.btn-secondary,
+.btn-secondary:hover,
+.btn-secondary:focus {
+  color: #333;
+  text-shadow: none;
+  /* Prevent inheritance from `body` */
+}
+
+
+/*
+ * Base structure
+ */
+
+body {
+  text-shadow: 0 .05rem .1rem rgba(0, 0, 0, .5);
+  box-shadow: inset 0 0 5rem rgba(0, 0, 0, .5);
+}
+
+.cover-container {
+  max-width: 64em;
+}
+
+
+/*
+ * Header
+ */
+
+.nav-masthead .nav-link {
+  padding: .25rem 0;
+  font-weight: 700;
+  color: rgba(255, 255, 255, .5);
+  background-color: transparent;
+  border-bottom: .25rem solid transparent;
+}
+
+.nav-masthead .nav-link:hover,
+.nav-masthead .nav-link:focus {
+  border-bottom-color: rgba(255, 255, 255, .25);
+}
+
+.nav-masthead .nav-link+.nav-link {
+  margin-left: 1rem;
+}
+
+.nav-masthead .active {
+  color: #fff;
+  border-bottom-color: #fff;
+}
+
+.bd-placeholder-img {
+  font-size: 1.125rem;
+  text-anchor: middle;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+}
+
+@media (min-width: 768px) {
+  .bd-placeholder-img-lg {
+    font-size: 3.5rem;
+  }
+}
+
+.alert-malware {
+  display: none;
+}
+
+/**
+ * ELEMENTS
+ */
+/* images */
+input[type=image],
+img {
+  vertical-align: middle;
+}
+
+
+.list-group-item {
+  color: inherit !important;
+  background: inherit !important;
+}
+
+/**
+ * DONATION BUTTONS
+ */
+span.donate-btns {
+  display: block;
+  text-align: center;
+  margin: 11px 0 3px;
+}
+
+a.donate-btn {
+  height: 26px;
+  display: inline-block;
+  margin: 2px 5px;
+  background: hsl(0, 0%, 95%);
+  line-height: 16px;
+  padding: 3px 8px 3px 24px;
+  border-radius: 3px;
+  color: hsl(0, 0%, 25%);
+  border: 1px solid hsl(0, 0%, 85%);
+  transition: all .2s;
+}
+
+a.donate-btn:hover {
+  color: #000;
+  border: 1px solid hsl(0, 0%, 70%);
+  background-color: hsl(0, 0%, 80%);
+}
+
+.icon {
+  display: block;
+  height: 16px;
+  width: 16px;
+  float: left;
+  margin-left: -20px;
+  margin-top: 1px;
+}
+
+.icon-paypal {
+  background-image: url('img/paypal.png');
+}
+
+.icon-bitcoin {
+  background-image: url('img/bitcoin.png');
+}
+
+.icon-flattr {
+  background-image: url('img/flattr.png');
+}
+
+/**
+ * UPLOAD FILE LIST
+ */
+
+.uploadOuter {
+  text-align: center;
+  padding: 20px;
+}
+
+.uploadOuter strong {
+  padding: 0 10px;
+}
+
+.dragBox {
+  width: 250px;
+  height: 100px;
+  margin: 0 auto;
+  position: relative;
+  text-align: center;
+  font-weight: bold;
+  line-height: 95px;
+  color: #999;
+  border: 2px dashed #ccc;
+  display: inline-block;
+  transition: transform 0.3s;
+}
+
+.dragBox input[type="file"] {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  opacity: 0;
+  top: 0;
+  left: 0;
+}
+
+.draging {
+  transform: scale(1.1);
+}
+
+#preview {
+  text-align: center;
+}
+
+#preview img {
+  max-width: 100%;
+}
+
+
+#upload-filelist {
+  list-style-type: none;
+  margin-top: 20px;
+  padding: 0;
+  text-align: left;
+}
+
+.error#upload-filelist {
+  color: #891A18;
+}
+
+.error#upload-filelist .progress-percent {
+  color: #B94A48;
+}
+
+.error#upload-filelist .file-progress {
+  display: none;
+}
+
+#upload-filelist>li {
+  margin-top: 5px;
+  overflow: hidden;
+}
+
+#upload-filelist>li.total {
+  border-top: 1px solid rgba(0, 0, 0, 0.05);
+  font-weight: bold;
+  padding-top: 5px;
+}
+
+.file-name {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  margin-right: 16px;
+}
+
+.file-progress,
+.file-url {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.progress {
+  width: 100%;
+  margin-right: 16px;
+}
+
+.progress-percent {
+  float: right;
+}
+
+progress[value] {
+  /* Reset the default appearance */
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+
+  border: none;
+
+}
+
+progress[value]::-webkit-progress-bar {
+  background-color: #eee;
+  border-radius: 2px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.25) inset;
+}
+
+/* completed rows */
+.completed .file-progress,
+.completed .progress-percent {
+  display: none;
+}
+
+.completed .file-url {
+  display: block;
+}
+
+/**
+ * PROGRESS BARS
+ */
+.progress-outer {
+  background-color: rgba(255, 255, 255, 0.8);
+  border: 1px solid white;
+  border-radius: 4px;
+  box-shadow: 0 0 0 1px black;
+  color: transparent;
+  display: inline-block;
+  font-size: 0;
+  float: right;
+  height: 8px;
+  margin: 6px 6px 0;
+  overflow: hidden;
+  vertical-align: middle;
+  width: 50px;
+}
+
+.progress-inner {
+  background-color: black;
+  height: 6px;
+  margin: 0;
+  width: 0;
+}
+
+/**
+ * MEDIA QUERIES
+ */
+@media only screen and (max-device-width: 320px),
+only screen and (max-width: 400px) {
+  #upload-filelist>li.file {
+    margin-top: 12px;
+    margin-bottom: 12px;
+  }
+
+  .file-progress {
+    width: 70%;
+  }
+
+  .file-name,
+  .file-url {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .file-url a {
+    text-decoration: underline;
+    margin-left: 15px;
+  }
+
+  .file-url a:before {
+    content: "http://";
+  }
+
+  .alert {
+    font-size: 13px;
+  }
+
+  .alert-error {
+    background-color: rgba(248, 223, 223, 0.75);
+  }
+
+}
+
+/*
+ * no js
+ */
+#upload-btn {
+  display: none;
+}
+
+.js #upload-input {
+  display: none;
+}
+
+.js input[type="submit"] {
+  display: none;
+}
+
+.js #upload-btn {
+  display: inline-block !important;
+}
+
+.dropdown-toggle::after {
+  display:none !important;
+}

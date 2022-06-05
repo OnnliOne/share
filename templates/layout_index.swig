@@ -3,16 +3,15 @@
 	<head>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<meta name="generator" content="Uguu {{pkgVersion}}">
 		<meta name="Description" content="{{SiteMetaInfo}}">
-		<title>{{siteName}} &middot; {% block title %}Kawaii Temporary File Hosting{% endblock %}</title>
+		<title>{{siteName}} &middot; {% block title %}Temporary File Hosting{% endblock %}</title>
 		<link rel="icon" type="image/png" sizes="32x32" href="/img/favicon-32x32.png">
-		<link rel="stylesheet" href="uguu.min.css">
-		<script src="uguu.min.js"></script>
+		<link rel="stylesheet" href="style.min.css">
+		<script src="main.min.js"></script>
 	</head>
 	<body>
 		<div class="container">
-			{% block body %}What the fuck are you doing here, <span lang="jp">baka</span>?{% endblock %}
+			{% block body %}Something went wrong. Try to reload the page.{% endblock %}
 		</div>
 	</body>
 </html>

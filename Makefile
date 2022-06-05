@@ -13,21 +13,18 @@ CONTAINER_NAME="$(CONTAINER_NAME)"
 # default modules
 MODULES="php"
 
-all: builddirs npm_dependencies swig htmlmin min-css min-js copy-img submodules
-	
+all: uninstall builddirs npm_dependencies swig htmlmin min-css min-js copy-img submodules
+
+all-2: builddirs npm_dependencies swig htmlmin min-css min-js copy-img submodules
+
 swig:
-	$(NODE) node_modules/swig/bin/swig.js render -j dist.json templates/faq.swig > $(CURDIR)/build/faq.html 
-	$(NODE) node_modules/swig/bin/swig.js render -j dist.json templates/index.swig > $(CURDIR)/build/index.html 
-	$(NODE) node_modules/swig/bin/swig.js render -j dist.json templates/tools.swig > $(CURDIR)/build/tools.html 
+	$(NODE) node_modules/swig/bin/swig.js render -j dist.json templates/index.swig > $(CURDIR)/build/index.html
 
 htmlmin:
-	$(NODE) node_modules/htmlmin/bin/htmlmin $(CURDIR)/build/index.html -o $(CURDIR)/build/index.html 
-	$(NODE) node_modules/htmlmin/bin/htmlmin $(CURDIR)/build/faq.html -o $(CURDIR)/build/faq.html 
-	$(NODE) node_modules/htmlmin/bin/htmlmin $(CURDIR)/build/tools.html -o $(CURDIR)/build/tools.html 
+	$(NODE) node_modules/htmlmin/bin/htmlmin $(CURDIR)/build/index.html -o $(CURDIR)/build/index.html
 
 installdirs:
 	mkdir -p $(DESTDIR)/ $(DESTDIR)/img
-	mkdir -p $(DESTDIR)/ $(DESTDIR)/img/grills
 ifneq (,$(findstring php,$(MODULES)))
 	mkdir -p $(DESTDIR)/includes
 endif
@@ -36,17 +33,13 @@ ifneq (,$(findstring moe,$(MODULES)))
 endif
 	
 min-css:
-	$(NODE) $(CURDIR)/node_modules/.bin/cleancss $(CURDIR)/static/css/uguu.css --output $(CURDIR)/build/uguu.min.css
+	$(NODE) $(CURDIR)/node_modules/.bin/cleancss $(CURDIR)/static/css/style.css --output $(CURDIR)/build/style.min.css
 
 min-js:
-	echo "// @source https://github.com/nokonoko/uguu/tree/master/static/js" > $(CURDIR)/build/uguu.min.js 
-	echo "// @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&dn=expat.txt Expat" >> $(CURDIR)/build/uguu.min.js
-	$(NODE) $(CURDIR)/node_modules/.bin/uglifyjs ./static/js/app.js >> $(CURDIR)/build/uguu.min.js 
-	echo "// @license-end" >> $(CURDIR)/build/uguu.min.js
+	$(NODE) $(CURDIR)/node_modules/.bin/uglifyjs ./static/js/app.js >> $(CURDIR)/build/main.min.js
 
 copy-img:
 	cp -v $(CURDIR)/static/img/*.png $(CURDIR)/build/img/
-	cp -R $(CURDIR)/static/img/grills $(CURDIR)/build/img/
 
 copy-php:
 ifneq ($(wildcard $(CURDIR)/static/php/.),)
@@ -74,14 +67,13 @@ dist:
 	
 clean:
 	rm -rvf $(CURDIR)/node_modules 
-	rm -rvf $(CURDIR)/build
 	
 uninstall:
+	rm -rvf $(CURDIR)/build
 	rm -rvf $(DESTDIR)/
 	
 npm_dependencies:
 	$(NPM) install
-
 
 build-image:
 		docker build -f docker/Dockerfile --build-arg VERSION=$(UGUU_RELEASE_VER) --no-cache -t $(DOCKER_IMAGE):$(DOCKER_TAG) .

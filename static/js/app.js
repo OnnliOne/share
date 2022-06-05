@@ -1,22 +1,3 @@
-/*
- * Uguu
- *
- * @copyright Copyright (c) 2022 Go Johansson (nekunekus) <neku@pomf.se> <github.com/nokonoko>
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <https://www.gnu.org/licenses/>.
- */
-
 document.addEventListener('DOMContentLoaded', function () {
     /**
      * Sets up the elements inside file upload rows.
@@ -26,22 +7,28 @@ document.addEventListener('DOMContentLoaded', function () {
      */
     function addRow(file) {
         var row = document.createElement('li');
+        row.className = 'list-group-item d-flex justify-content-between align-items-center';
 
         var name = document.createElement('span');
         name.textContent = file.name;
         name.className = 'file-name';
 
         var progressIndicator = document.createElement('span');
-        progressIndicator.className = 'progress-percent';
+        progressIndicator.className = 'progress-percent badge bg-primary rounded-pill';
         progressIndicator.textContent = '0%';
 
-        var progressBar = document.createElement('progress');
-        progressBar.className = 'file-progress';
-        progressBar.setAttribute('max', '100');
-        progressBar.setAttribute('value', '0');
+        var progressDiv = document.createElement('div');
+        progressDiv.className = 'progress';
+        var progressBar = document.createElement('div');
+        progressBar.className = 'progress-bar';
+        progressBar.setAttribute('role', 'progressbar');
+        progressBar.setAttribute('aria-valuemax', '100');
+        progressBar.setAttribute('aria-valuemin', '0');
+        progressBar.setAttribute('aria-valuenow', '0');
+        progressDiv.appendChild(progressBar)
 
         row.appendChild(name);
-        row.appendChild(progressBar);
+        row.appendChild(progressDiv);
         row.appendChild(progressIndicator);
 
         document.getElementById('upload-filelist').appendChild(row);
@@ -55,15 +42,17 @@ document.addEventListener('DOMContentLoaded', function () {
      */
     function handleUploadProgress(evt) {
         var xhr = evt.target;
-        var bar = xhr.bar;
-        var percentIndicator = xhr.percent;
+        var progress = xhr.progress;
+        var progressBar = xhr.progressBar;
+        var percentIndicator = xhr.percentIndicator;
 
         /* If we have amounts of work done/left that we can calculate with
            (which, unless we're uploading dynamically resizing data, is always), calculate the percentage. */
         if (evt.lengthComputable) {
-            var progressPercent = Math.floor((evt.loaded / evt.total) * 100);
-            bar.setAttribute('value', progressPercent);
-            percentIndicator.textContent = progressPercent + '%';
+            var percent = Math.floor((evt.loaded / evt.total) * 100);
+            progressBar.setAttribute('style', "width:" + percent + "%;");
+            progressBar.setAttribute('aria-valuenow', percent);
+            percentIndicator.textContent = percent + '%';
         }
     }
 
@@ -76,18 +65,21 @@ document.addEventListener('DOMContentLoaded', function () {
      */
     function handleUploadComplete(evt) {
         var xhr = evt.target;
-        var bar = xhr.bar;
         var row = xhr.row;
-        var percentIndicator = xhr.percent;
+        var progress = xhr.progress;
+        var progressBar = xhr.progressBar;
+        var percentIndicator = xhr.percentIndicator;
 
+        progress.style.visibility = 'hidden';
+        progressBar.style.visibility = 'hidden';
         percentIndicator.style.visibility = 'hidden';
-        bar.style.visibility = 'hidden';
-        row.removeChild(bar);
+        row.removeChild(progress);
         row.removeChild(percentIndicator);
         var respStatus = xhr.status;
+        console.log(respStatus)
 
         var url = document.createElement('span');
-        url.className = 'file-url';
+        url.className = 'file-url text-white';
         row.appendChild(url);
 
         var link = document.createElement('a');
@@ -98,10 +90,11 @@ document.addEventListener('DOMContentLoaded', function () {
                 link.href = response.files[0].url;
                 url.appendChild(link);
                 var copy = document.createElement('button');
-                copy.className = 'upload-clipboard-btn';
-                var glyph = document.createElement('img');
-                glyph.src = 'img/glyphicons-512-copy.png';
-                copy.appendChild(glyph);
+                copy.className = 'btn btn-link upload-clipboard-btn';
+                copy.innerHTML = '<i class="fa-solid fa-copy"></i>';
+                progressBar.setAttribute('data-bs-toggle', 'tooltip');
+                progressBar.setAttribute('data-bs-placement', 'top');
+                progressBar.setAttribute('title', 'Copy to Clipboard');
                 url.appendChild(copy);
                 copy.addEventListener("click", function (event) {
                     /* Why create an element?  The text needs to be on screen to be
@@ -122,7 +115,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     link.removeChild(element);
                 });
             } else {
-                bar.innerHTML = 'Error: ' + response.description;
+                progressBar.innerHTML = 'Error: ' + response.description;
             }
         } else if (respStatus === 413) {
             link.textContent = 'File too big!';
@@ -141,16 +134,22 @@ document.addEventListener('DOMContentLoaded', function () {
      * @param {HTMLLIElement} row
      */
     function uploadFile(file, row) {
-        var bar = row.querySelector('.file-progress');
+        var element = document.getElementById("alert-malware");
+        element.classList.remove("alert-malware");
+
+        var progress = row.querySelector('.progress');
+        var progressBar = row.querySelector('.progress-bar');
         var percentIndicator = row.querySelector('.progress-percent');
         var xhr = new XMLHttpRequest();
         xhr.open('POST', 'upload.php');
 
         xhr['row'] = row;
-        xhr['bar'] = bar;
-        xhr['percent'] = percentIndicator;
-        xhr.upload['bar'] = bar;
-        xhr.upload['percent'] = percentIndicator;
+        xhr['progress'] = progress;
+        xhr['progressBar'] = progressBar;
+        xhr['percentIndicator'] = percentIndicator;
+        xhr.upload['progress'] = progress;
+        xhr.upload['progressBar'] = progressBar;
+        xhr.upload['percentIndicator'] = percentIndicator;
 
         xhr.addEventListener('load', handleUploadComplete, false);
         xhr.upload.onprogress = handleUploadProgress;
@@ -182,7 +181,7 @@ document.addEventListener('DOMContentLoaded', function () {
     function handleDrag(state, element, evt) {
         stopDefaultEvent(evt);
         if (state.dragCount == 1) {
-            element.textContent = 'Drop it here~';
+            element.textContent = 'Drop it Here';
         }
         state.dragCount += 1;
     }
@@ -198,7 +197,7 @@ document.addEventListener('DOMContentLoaded', function () {
         stopDefaultEvent(evt);
         state.dragCount -= 1;
         if (state.dragCount == 0) {
-            element.textContent = 'Select or drop file(s)';
+            element.textContent = 'Click Here or Drag or Drop';
         }
     }
 
@@ -260,7 +259,7 @@ document.addEventListener('DOMContentLoaded', function () {
     /* Set-up the event handlers for the <button>, <input> and the window itself
        and also set the "js" class on selector "#upload-form", presumably to
        allow custom styles for clients running javascript. */
-    var state = {dragCount: 0};
+    var state = { dragCount: 0 };
     var uploadButton = document.getElementById('upload-btn');
     window.addEventListener('dragenter', handleDrag.bind(this, state, uploadButton), false);
     window.addEventListener('dragleave', handleDragAway.bind(this, state, uploadButton), false);

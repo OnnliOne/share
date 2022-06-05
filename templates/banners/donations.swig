@@ -1,4 +1,4 @@
-<p class="alert alert-info">
+<div class="alert alert-primary" role="alert">
 	<strong>{{siteName}} is free to use, but our hosting costs are far from it</strong> &mdash; donations are what keep {{siteName}} alive, free, and fast.</strong>
 	<span class="donate-btns">
 		{% if paypalUrl != '' %}
@@ -20,4 +20,4 @@
 			</a>
 		{% endif %}
 	</span>
-</p>
+</div>

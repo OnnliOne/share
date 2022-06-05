@@ -71,6 +71,29 @@ class Upload
      */
     public static function uploadFile(): array
     {
+        function convertBytes( $value ) {
+            if ( is_numeric( $value ) ) {
+                return $value;
+            } else {
+                $value_length = strlen($value);
+                $qty = substr( $value, 0, $value_length - 1 );
+                $unit = strtolower( substr( $value, $value_length - 1 ) );
+                switch ( $unit ) {
+                    case 'k':
+                        $qty *= 1024;
+                        break;
+                    case 'm':
+                        $qty *= 1048576;
+                        break;
+                    case 'g':
+                        $qty *= 1073741824;
+                        break;
+                }
+                return $qty;
+            }
+        }
+        $maxFileSize = convertBytes(ini_get('upload_max_filesize'));
+
         Settings::loadConfig();
         self::fileInfo();
 
@@ -91,6 +114,10 @@ class Upload
 
         if (!Settings::$ANTI_DUPE) {
             self::generateName();
+        }
+
+        if (self::$FILE_SIZE >= $maxFileSize) {
+            throw new Exception('File too big.', 413);
         }
 
         if (!is_dir(Settings::$FILES_ROOT)) {
