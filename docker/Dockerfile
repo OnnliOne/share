@@ -21,7 +21,7 @@ WORKDIR  /var/www/
 
 COPY docker/docker-entrypoint.sh .
 
-# Download Uguu
+# Download Software
 # ADD https://git.pomf.se/Pomf/share/archive/v${VERSION}.tar.gz v${VERSION}.tar.gz
 # RUN tar xvf v${VERSION}.tar.gz
 

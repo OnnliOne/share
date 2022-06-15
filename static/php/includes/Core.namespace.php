@@ -1,25 +1,5 @@
 <?php
 
-/*
- * Uguu
- *
- * @copyright Copyright (c) 2022 Go Johansson (nokonoko) <neku@pomf.se>
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <https://www.gnu.org/licenses/>.
- */
-
-
 namespace Core {
 
     require_once 'Upload.class.php';
@@ -45,6 +25,7 @@ namespace Core {
 
         public static string $FILES_ROOT;
         public static int $FILES_RETRIES;
+        public static int $MAX_UPLOAD_SIZE;
 
         public static bool $SSL;
         public static string $URL;
@@ -60,12 +41,12 @@ namespace Core {
          */
         public static function loadConfig()
         {
-            if (!file_exists('/var/www/uguu/dist.json')) {
-                throw new Exception('Cant read settings file.', 500);
+            if (!file_exists('/home/webminas/share.onn.li/dist.json')) {
+                throw new Exception('Can\'t read settings file.', 500);
             }
             try {
                 $settings_array = json_decode(
-                    file_get_contents('/var/www/uguu/dist.json'),
+                    file_get_contents('/home/webminas/share.onn.li/dist.json'),
                     true
                 );
                 self::$DB_MODE = $settings_array['DB_MODE'];
@@ -78,6 +59,7 @@ namespace Core {
                 self::$FILTER_MODE = $settings_array['FILTER_MODE'];
                 self::$FILES_ROOT = $settings_array['FILES_ROOT'];
                 self::$FILES_RETRIES = $settings_array['FILES_RETRIES'];
+                self::$MAX_UPLOAD_SIZE = $settings_array['max_upload_size'];
                 self::$SSL = $settings_array['SSL'];
                 self::$URL = $settings_array['URL'];
                 self::$NAME_LENGTH = $settings_array['NAME_LENGTH'];
@@ -85,7 +67,7 @@ namespace Core {
                 self::$BLOCKED_EXTENSIONS = $settings_array['BLOCKED_EXTENSIONS'];
                 self::$BLOCKED_MIME = $settings_array['BLOCKED_MIME'];
             } catch (Exception) {
-                throw new Exception('Cant populate settings.', 500);
+                throw new Exception('Can\'t populate settings.', 500);
             }
             Database::assemblePDO();
         }
@@ -215,7 +197,7 @@ namespace Core {
             $result = '';
 
             foreach ($files as $file) {
-                $result .= '<a href="' . $file['url'] . '">' . $file['url'] . '</a><br>';
+                $result .= '<a href="' . $file['url'] . '">' . $file['url'] . '</a><br/>';
             }
 
             return $result;
@@ -250,11 +232,12 @@ namespace Core {
         {
             try {
                 Settings::$DB = new PDO(
-                    Settings::$DB_MODE . ':' . Settings::$DB_PATH, Settings::$DB_USER,
+                    Settings::$DB_MODE . ':' . Settings::$DB_PATH,
+                    Settings::$DB_USER,
                     Settings::$DB_PASS
                 );
             } catch (Exception) {
-                throw new Exception('Cant connect to DB.', 500);
+                throw new Exception('Can\'t connect to DB.', 500);
             }
         }
 
@@ -269,7 +252,7 @@ namespace Core {
                 $q->execute();
                 return $q->fetchColumn();
             } catch (Exception) {
-                throw new Exception('Cant check if name exists in DB.', 500);
+                throw new Exception('Can\'t check if name exists in DB.', 500);
             }
         }
 
@@ -287,7 +270,7 @@ namespace Core {
                     throw new Exception('File blacklisted!', 415);
                 }
             } catch (Exception) {
-                throw new Exception('Cant check blacklist DB.', 500);
+                throw new Exception('Can\'t check blacklist DB.', 500);
             }
         }
 
@@ -310,7 +293,7 @@ namespace Core {
                     Upload::generateName();
                 }
             } catch (Exception) {
-                throw new Exception('Cant check for dupes in DB.', 500);
+                throw new Exception('Can\'t check for dupes in DB.', 500);
             }
         }
 
@@ -321,8 +304,7 @@ namespace Core {
         {
             try {
                 $q = Settings::$DB->prepare(
-                    'INSERT INTO files (hash, originalname, filename, size, date, ip)' .
-                    'VALUES (:hash, :orig, :name, :size, :date, :ip)'
+                    'INSERT INTO files (hash, originalname, filename, size, date, ip) VALUES (:hash, :orig, :name, :size, :date, :ip)'
                 );
                 $q->bindValue(':hash', Upload::$SHA1, PDO::PARAM_STR);
                 $q->bindValue(':orig', Upload::$FILE_NAME, PDO::PARAM_STR);
@@ -332,10 +314,8 @@ namespace Core {
                 $q->bindValue(':ip', Upload::$IP, PDO::PARAM_STR);
                 $q->execute();
             } catch (Exception) {
-                throw new Exception('Cant insert into DB.', 500);
+                throw new Exception('Can\'t insert into DB.', 500);
             }
         }
     }
 }
-
-

@@ -1,20 +1,16 @@
 {
-  "name": "uguu",
-  "version": "1.5.3",
+  "name": "share",
+  "version": "0.7.0",
   "description": "Temporary File Sharing",
   "homepage": "https://onn.li/",
   "repository": {
     "type": "git",
-    "url": "https://github.com/nokonoko/uguu"
+    "url": "https://github.com/onnlione/share"
   },
-  "author": "Go Johansson <neku@pomf.se>",
-  "contributors": [
-    "Pomf Community <github.com/pomf/pomf>",
-    "Uguu Community <github.com/nokonoko/uguu>"
-  ],
-  "license": "GPLV3",
+  "author": "Onnli Team <hello@onnli.one>",
+  "license": "GPL-3.0",
   "bugs": {
-    "url": "https://github.com/nokonoko/uguu/issues"
+    "url": "https://github.com/onnlione/share/issues"
   },
   "devDependencies": {
     "clean-css": "^5.3.0",

@@ -24,7 +24,6 @@
   "infoContact": "${INFO_CONTACT}",
   "ServerCountryLocation": "${SERVER_CN_LOC}",
   "SiteMetaInfo": "${SITE_META_INFO}",
-  "ToolsDesc": "The following tools might need editing to work on this clone of Uguu, usually editing the URL works.",
   "paypalUrl": "${PAYPAL_URL}",
   "bitcoinAddress": "${BTC_ADDR}",
   "flattrUrl": "${FLATTR_URL}",
@@ -55,9 +54,11 @@
     "msi",
     "apk",
     "phtml",
-    "svg"
+    "svg",
+    "wasm"
   ],
   "BLOCKED_MIME": [
+    "application/wasm",
     "application/msword",
     "text/html",
     "application/x-dosexec",

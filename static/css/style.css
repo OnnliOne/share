@@ -11,17 +11,6 @@
  * Globals
  */
 
-
-/* Custom default button */
-.btn-secondary,
-.btn-secondary:hover,
-.btn-secondary:focus {
-  color: #333;
-  text-shadow: none;
-  /* Prevent inheritance from `body` */
-}
-
-
 /*
  * Base structure
  */
@@ -90,11 +79,6 @@ img {
 }
 
 
-.list-group-item {
-  color: inherit !important;
-  background: inherit !important;
-}
-
 /**
  * DONATION BUTTONS
  */
@@ -143,55 +127,6 @@ a.donate-btn:hover {
 .icon-flattr {
   background-image: url('img/flattr.png');
 }
-
-/**
- * UPLOAD FILE LIST
- */
-
-.uploadOuter {
-  text-align: center;
-  padding: 20px;
-}
-
-.uploadOuter strong {
-  padding: 0 10px;
-}
-
-.dragBox {
-  width: 250px;
-  height: 100px;
-  margin: 0 auto;
-  position: relative;
-  text-align: center;
-  font-weight: bold;
-  line-height: 95px;
-  color: #999;
-  border: 2px dashed #ccc;
-  display: inline-block;
-  transition: transform 0.3s;
-}
-
-.dragBox input[type="file"] {
-  position: absolute;
-  height: 100%;
-  width: 100%;
-  opacity: 0;
-  top: 0;
-  left: 0;
-}
-
-.draging {
-  transform: scale(1.1);
-}
-
-#preview {
-  text-align: center;
-}
-
-#preview img {
-  max-width: 100%;
-}
-
 
 #upload-filelist {
   list-style-type: none;
@@ -355,5 +290,5 @@ only screen and (max-width: 400px) {
 }
 
 .dropdown-toggle::after {
-  display:none !important;
+  display: none !important;
 }

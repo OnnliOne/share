@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', function () {
         var progressDiv = document.createElement('div');
         progressDiv.className = 'progress';
         var progressBar = document.createElement('div');
-        progressBar.className = 'progress-bar';
+        progressBar.className = 'progress-bar text-white';
         progressBar.setAttribute('role', 'progressbar');
         progressBar.setAttribute('aria-valuemax', '100');
         progressBar.setAttribute('aria-valuemin', '0');
@@ -42,7 +42,6 @@ document.addEventListener('DOMContentLoaded', function () {
      */
     function handleUploadProgress(evt) {
         var xhr = evt.target;
-        var progress = xhr.progress;
         var progressBar = xhr.progressBar;
         var percentIndicator = xhr.percentIndicator;
 
@@ -52,6 +51,7 @@ document.addEventListener('DOMContentLoaded', function () {
             var percent = Math.floor((evt.loaded / evt.total) * 100);
             progressBar.setAttribute('style', "width:" + percent + "%;");
             progressBar.setAttribute('aria-valuenow', percent);
+            progressBar.innerHTML = percent + '%';
             percentIndicator.textContent = percent + '%';
         }
     }
@@ -71,9 +71,8 @@ document.addEventListener('DOMContentLoaded', function () {
         var percentIndicator = xhr.percentIndicator;
 
         progress.style.visibility = 'hidden';
-        progressBar.style.visibility = 'hidden';
-        percentIndicator.style.visibility = 'hidden';
         row.removeChild(progress);
+        percentIndicator.style.visibility = 'hidden';
         row.removeChild(percentIndicator);
         var respStatus = xhr.status;
         console.log(respStatus)
@@ -92,9 +91,9 @@ document.addEventListener('DOMContentLoaded', function () {
                 var copy = document.createElement('button');
                 copy.className = 'btn btn-link upload-clipboard-btn';
                 copy.innerHTML = '<i class="fa-solid fa-copy"></i>';
-                progressBar.setAttribute('data-bs-toggle', 'tooltip');
-                progressBar.setAttribute('data-bs-placement', 'top');
-                progressBar.setAttribute('title', 'Copy to Clipboard');
+                copy.setAttribute('data-bs-toggle', 'tooltip');
+                copy.setAttribute('data-bs-placement', 'top');
+                copy.setAttribute('title', 'Copy to Clipboard');
                 url.appendChild(copy);
                 copy.addEventListener("click", function (event) {
                     /* Why create an element?  The text needs to be on screen to be
@@ -215,7 +214,23 @@ document.addEventListener('DOMContentLoaded', function () {
         for (var i = 0; i < len; i++) {
             var file = evt.dataTransfer.files[i];
             var row = addRow(file);
-            uploadFile(file, row);
+            const maxAllowedSize = 128 * 1024 * 1024;
+            if (file.size <= maxAllowedSize) {
+                uploadFile(file, row);
+            } else {
+                var progress = row.querySelector('.progress');
+                var percentIndicator = row.querySelector('.progress-percent');
+
+                progress.style.visibility = 'hidden';
+                row.removeChild(progress);
+                percentIndicator.style.visibility = 'hidden';
+                row.removeChild(percentIndicator);
+
+                var text = document.createElement('span');
+                text.className = 'text-white';
+                text.innerHTML = 'File to big!'
+                row.appendChild(text);
+            }
         }
     }
 
@@ -230,7 +245,23 @@ document.addEventListener('DOMContentLoaded', function () {
         for (var i = 0; i < len; i++) {
             var file = evt.target.files[i];
             var row = addRow(file);
-            uploadFile(file, row);
+            const maxAllowedSize = 128 * 1024 * 1024;
+            if (file.size <= maxAllowedSize) {
+                uploadFile(file, row);
+            } else {
+                var progress = row.querySelector('.progress');
+                var percentIndicator = row.querySelector('.progress-percent');
+
+                progress.style.visibility = 'hidden';
+                row.removeChild(progress);
+                percentIndicator.style.visibility = 'hidden';
+                row.removeChild(percentIndicator);
+
+                var text = document.createElement('span');
+                text.className = 'text-white';
+                text.innerHTML = 'File to big!'
+                row.appendChild(text);
+            }
         }
     }
 
@@ -251,7 +282,23 @@ document.addEventListener('DOMContentLoaded', function () {
         for (var i = 0; i < len; i++) {
             var file = e.clipboardData.files[i];
             var row = addRow(file);
-            uploadFile(file, row);
+            const maxAllowedSize = 128 * 1024 * 1024;
+            if (file.size <= maxAllowedSize) {
+                uploadFile(file, row);
+            } else {
+                var progress = row.querySelector('.progress');
+                var percentIndicator = row.querySelector('.progress-percent');
+
+                progress.style.visibility = 'hidden';
+                row.removeChild(progress);
+                percentIndicator.style.visibility = 'hidden';
+                row.removeChild(percentIndicator);
+
+                var text = document.createElement('span');
+                text.className = 'text-white';
+                text.innerHTML = 'File to big!'
+                row.appendChild(text);
+            }
         }
     });
 

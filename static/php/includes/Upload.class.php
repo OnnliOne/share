@@ -1,24 +1,4 @@
 <?php
-/*
- * Uguu
- *
- * @copyright Copyright (c) 2022 Go Johansson (nokonoko) <neku@pomf.se>
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <https://www.gnu.org/licenses/>.
- */
-
-
 require_once 'Core.namespace.php';
 
 use Core\Database as Database;
@@ -71,14 +51,15 @@ class Upload
      */
     public static function uploadFile(): array
     {
-        function convertBytes( $value ) {
-            if ( is_numeric( $value ) ) {
+        function convertBytes($value)
+        {
+            if (is_numeric($value)) {
                 return $value;
             } else {
                 $value_length = strlen($value);
-                $qty = substr( $value, 0, $value_length - 1 );
-                $unit = strtolower( substr( $value, $value_length - 1 ) );
-                switch ( $unit ) {
+                $qty = substr($value, 0, $value_length - 1);
+                $unit = strtolower(substr($value, $value_length - 1));
+                switch ($unit) {
                     case 'k':
                         $qty *= 1024;
                         break;
@@ -92,7 +73,7 @@ class Upload
                 return $qty;
             }
         }
-        $maxFileSize = convertBytes(ini_get('upload_max_filesize'));
+        $systemMaxFileSize = convertBytes(ini_get('upload_max_filesize'));
 
         Settings::loadConfig();
         self::fileInfo();
@@ -103,7 +84,7 @@ class Upload
 
         if (Settings::$FILTER_MODE) {
             self::checkMimeBlacklist();
-            if(!is_null(self::$FILE_EXTENSION)){
+            if (!is_null(self::$FILE_EXTENSION)) {
                 self::checkExtensionBlacklist();
             }
         }
@@ -116,7 +97,7 @@ class Upload
             self::generateName();
         }
 
-        if (self::$FILE_SIZE >= $maxFileSize) {
+        if (self::$FILE_SIZE >= $systemMaxFileSize) {
             throw new Exception('File too big.', 413);
         }
 
@@ -169,8 +150,8 @@ class Upload
             finfo_close($finfo);
 
             $extension = explode('.', self::$FILE_NAME);
-            if(substr_count(self::$FILE_NAME, '.') > 0) {
-                self::$FILE_EXTENSION = $extension[count($extension)-1];
+            if (substr_count(self::$FILE_NAME, '.') > 0) {
+                self::$FILE_EXTENSION = $extension[count($extension) - 1];
             } else {
                 self::$FILE_EXTENSION = null;
             }
@@ -216,7 +197,7 @@ class Upload
                 throw new Exception('Gave up trying to find an unused name!', 500);
             }
 
-            self::$NEW_NAME = '';
+            self::$NEW_NAME = str_replace('.' . self::$FILE_EXTENSION, '', self::$FILE_NAME) . '_';
             for ($i = 0; $i < Settings::$NAME_LENGTH; ++$i) {
                 self::$NEW_NAME .= Settings::$ID_CHARSET[mt_rand(0, strlen(Settings::$ID_CHARSET))];
             }
@@ -226,7 +207,6 @@ class Upload
             if (!is_null(self::$FILE_EXTENSION)) {
                 self::$NEW_NAME_FULL .= '.' . self::$FILE_EXTENSION;
             }
-
         } while (Database::dbCheckNameExists() > 0);
     }
 }
