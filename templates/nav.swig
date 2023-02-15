@@ -15,10 +15,10 @@
 				<li class="active"><a class="dropdown-item" href="https://share.{{FQDN}}"><img src="img/onnli-share-mini.png" /> <span class="align-bottom ms-2">File Share</span></a></li>
 				<li><a class="dropdown-item" href="https://short.{{FQDN}}"><img src="img/onnli-short-mini.png" /> <span class="align-bottom ms-2">URL Shorting</span></a></li>
 				<li><a class="dropdown-item" href="https://bin.{{FQDN}}"><img src="img/onnli-bin-mini.png" /> <span class="align-bottom ms-2">Paste Tool</span></a></li>
-				<li><a class="dropdown-item" href="https://snip.{{FQDN}}"><img src="img/onnli-snip-mini.png" /> <span class="align-bottom ms-2">´Code Snipped</span></a></li>
+				<li><a class="dropdown-item" href="https://snip.{{FQDN}}"><img src="img/onnli-snip-mini.png" /> <span class="align-bottom ms-2">Code Snipped</span></a></li>
 				<li><a class="dropdown-item" href="https://tools.{{FQDN}}"><img src="img/onnli-tools-mini.png" /> <span class="align-bottom ms-2">Others Tools</span></a></li>
 				<li><a class="dropdown-item" href="https://status.{{FQDN}}"><img src="img/onnli-status-mini.png" /> <span class="align-bottom ms-2">Status</span></a></li>
-				<li><a class="dropdown-item" href="https://feedback.{{FQDN}}"><img src="img/onnli-feedback-mini.png" /> <span class="align-bottom ms-2">Feedback</span></a></li>
+				<li><a class="dropdown-item" href="https://feedback.{{FQDN}}"><span class="align-bottom">Feedback</span></a></li>
 			</ul>
 		</div>
 		<h3 class="mb-0"><a href="/"><img src="img/onnli-share-mini.png" alt="{{siteName}}" /></a></h3>
